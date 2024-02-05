@@ -5,13 +5,17 @@ type HtmlToPdfInitParams = {
   puppeteerUtil: IPuppeteerUtil
 }
 
-export default async function HtmlToPdf({ puppeteerUtil }: HtmlToPdfInitParams): Promise<IHtmlToPdf> {
+export default function HtmlToPdf({ puppeteerUtil }: HtmlToPdfInitParams): IHtmlToPdf {
   const convert = async ({ htmlText }: HtmlToPdfRequest): Promise<HtmlToPdfResponse> => {
-    const _pdf = await puppeteerUtil.convertHtmlToPdf({ htmlText })
+    try {
+      const _pdf = await puppeteerUtil.convertHtmlToPdf({ htmlText })
 
-    return {
-      htmlBuffer: _pdf.buffer,
-      htmlBufferString: _pdf.buffer.toString(),
+      return {
+        htmlBuffer: _pdf.buffer,
+        htmlBufferString: _pdf.buffer.toString(),
+      }
+    } catch (error) {
+      throw error
     }
   }
 

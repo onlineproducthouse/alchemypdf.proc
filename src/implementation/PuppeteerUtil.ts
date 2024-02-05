@@ -4,25 +4,29 @@ import { IPuppeteerUtil } from "../interface"
 
 export default function PuppeteerUtil(): IPuppeteerUtil {
   const convertHtmlToPdf = async (payload: PuppeteerToPdfRequest): Promise<PuppeteerToPdfResponse> => {
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
+    try {
+      const browser = await puppeteer.launch()
+      const page = await browser.newPage()
 
-    await page.setContent(payload.htmlText)
+      await page.setContent(payload.htmlText)
 
-    const buffer = await page.pdf({
-      format: 'A4',
-      margin: {
-        bottom: "8mm",
-        top: "8mm",
-        left: "8mm",
-        right: "8mm",
-      },
-    })
+      const buffer = await page.pdf({
+        format: 'A4',
+        margin: {
+          bottom: "8mm",
+          top: "8mm",
+          left: "8mm",
+          right: "8mm",
+        },
+      })
 
-    await browser.close()
+      await browser.close()
 
-    return {
-      buffer,
+      return {
+        buffer,
+      }
+    } catch (error) {
+      throw error
     }
   }
 
