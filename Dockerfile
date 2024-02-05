@@ -2,7 +2,7 @@
 
 ARG IMAGE_REGISTRY_BASE_URL
 
-FROM --platform=linux/amd64 ${IMAGE_REGISTRY_BASE_URL}/node:18.14-alpine AS builder
+FROM --platform=linux/amd64 ${IMAGE_REGISTRY_BASE_URL}/node-alpine:18.14 AS builder
 
 LABEL maintainer="Bongani Masuku <bongani@1702tech.com>"
 
