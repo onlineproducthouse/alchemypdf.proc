@@ -10,7 +10,7 @@ import {
 dotenv.config()
 
 const app: Express = express()
-const port: number = parseInt(process.env.PORT || "3000", 10)
+const port: number = parseInt(process.env.API_PORT || "3000", 10)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -20,15 +20,15 @@ app.use(ApiKeyValidator())
 app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const response = await ioc.htmlToPdfService.convert(req.body)
-    res.json(response)
+    return res.json(response)
   } catch (error) {
-    next(error)
+    return next(error)
   }
 })
 
-app.use((error: Error, req: Request, res: Response, _next: NextFunction) => {
+app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.log(error)
-  res.json(req.body)
+  return res.status(500).send(error)
 })
 
 app.listen(port, () => {
