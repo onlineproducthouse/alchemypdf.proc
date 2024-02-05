@@ -2,6 +2,9 @@ import express, { Express, Request, Response, NextFunction } from "express"
 import * as dotenv from "dotenv"
 import bodyParser from "body-parser"
 import ioc from "./ioc"
+import {
+  RequestIdGenerator,
+} from "./middleware"
 
 dotenv.config()
 
@@ -10,6 +13,7 @@ const port: number = parseInt(process.env.PORT || "3000", 10)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(RequestIdGenerator())
 
 app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFunction) => {
   try {
