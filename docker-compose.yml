@@ -8,6 +8,6 @@ services:
       args:
         IMAGE_REGISTRY_BASE_URL: ${IMAGE_REGISTRY_BASE_URL}
     ports:
-      - "${API_PORT}:${API_PORT}"
+      - "${HTML_TO_PDF_CONVERTER_API_PORT}:${HTML_TO_PDF_CONVERTER_API_PORT}"
     env_file:
       - .env

@@ -1,21 +1,19 @@
 import express, { Express, Request, Response, NextFunction } from "express"
-import * as dotenv from "dotenv"
 import bodyParser from "body-parser"
 import ioc from "./ioc"
 import {
   ApiKeyValidator,
   RequestIdGenerator,
 } from "./middleware"
+import { _config } from "./config"
 
-dotenv.config()
-
+const __config = _config()
 const app: Express = express()
-const port: number = parseInt(process.env.API_PORT || "3000", 10)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(RequestIdGenerator())
-app.use(ApiKeyValidator())
+app.use(ApiKeyValidator(__config))
 
 app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -31,6 +29,6 @@ app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
   return res.status(500).send(error)
 })
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`)
+app.listen(__config.port, () => {
+  console.log(`[server]: Server is running at http://localhost:${__config.port}`)
 })
