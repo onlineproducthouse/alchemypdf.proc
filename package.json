@@ -14,7 +14,8 @@
     "rebuild": "yarn clean && yarn build",
     "test": "jest -i",
     "dev": "ts-node src/index.ts",
-    "serve": "node lib/index.js"
+    "serve": "node lib/index.js",
+    "docker": "source .env && echo $(aws ecr get-login-password | docker login --username AWS --password-stdin $IMAGE_REGISTRY_BASE_URL) && docker-compose -f 'docker-compose.yml' up --build"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
