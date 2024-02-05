@@ -5,7 +5,7 @@ import { IPuppeteerUtil } from "../interface"
 export default function PuppeteerUtil(): IPuppeteerUtil {
   const convertHtmlToPdf = async (payload: PuppeteerToPdfRequest): Promise<PuppeteerToPdfResponse> => {
     try {
-      const browser = await puppeteer.launch()
+      const browser = await puppeteer.launch({ headless: "new" })
       const page = await browser.newPage()
 
       await page.setContent(payload.htmlText)
