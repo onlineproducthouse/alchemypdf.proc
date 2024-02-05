@@ -11,7 +11,6 @@ export default function HtmlToPdf({ puppeteerUtil }: HtmlToPdfInitParams): IHtml
       const _pdf = await puppeteerUtil.convertHtmlToPdf({ htmlText })
 
       return {
-        htmlBuffer: _pdf.buffer,
         htmlBufferString: _pdf.buffer.toString(),
       }
     } catch (error) {

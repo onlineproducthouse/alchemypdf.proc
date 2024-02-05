@@ -6,10 +6,12 @@ import {
   RequestIdGenerator,
 } from "./middleware"
 import { _config } from "./config"
+import cors from "cors"
 
 const __config = _config()
 const app: Express = express()
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(RequestIdGenerator())
