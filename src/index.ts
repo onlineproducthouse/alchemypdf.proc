@@ -3,6 +3,7 @@ import * as dotenv from "dotenv"
 import bodyParser from "body-parser"
 import ioc from "./ioc"
 import {
+  ApiKeyValidator,
   RequestIdGenerator,
 } from "./middleware"
 
@@ -14,6 +15,7 @@ const port: number = parseInt(process.env.PORT || "3000", 10)
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(RequestIdGenerator())
+app.use(ApiKeyValidator())
 
 app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFunction) => {
   try {
