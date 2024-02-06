@@ -1,5 +1,5 @@
 type PuppeteerToPdfResponse = {
-  buffer: Buffer
+  base64: string
 }
 
 export default PuppeteerToPdfResponse

@@ -14,8 +14,8 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
       await page.setContent(payload.htmlText)
 
       const buffer = await page.pdf({
-        path: "./example.pdf",
         format: 'A4',
+        scale: 0.7,
         margin: {
           bottom: "8mm",
           top: "8mm",
@@ -27,7 +27,7 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
       await browser.close()
 
       return {
-        buffer,
+        base64: buffer.toString('base64'),
       }
     } catch (error) {
       throw error

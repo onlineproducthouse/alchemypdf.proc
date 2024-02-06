@@ -1,6 +1,5 @@
 type HtmlToPdfResponse = {
-  size: number
-  htmlBufferString: string
+  htmlBase64: string
 }
 
 export default HtmlToPdfResponse
