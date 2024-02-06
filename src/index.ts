@@ -27,8 +27,10 @@ app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFuncti
 })
 
 app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
-  console.log(error)
-  return res.status(500).send(error)
+  return res.status(500).send({
+    statusCode: 500,
+    message: error.message
+  })
 })
 
 app.listen(__config.port, () => {

@@ -1,4 +1,5 @@
 type HtmlToPdfResponse = {
+  size: number
   htmlBufferString: string
 }
 
