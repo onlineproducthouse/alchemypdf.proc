@@ -17,7 +17,10 @@ app.use(bodyParser.json())
 app.use(RequestIdGenerator())
 app.use(ApiKeyValidator(__config))
 
-app.get('/HealthCheck/Ping', async (_: Request, res: Response) => res.status(200).send("Ok"))
+app.get('/HealthCheck/Ping', async (_: Request, res: Response) => res.status(200).send({
+  statusCode: 200,
+  message: "Ok"
+}))
 
 app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFunction) => {
   try {
