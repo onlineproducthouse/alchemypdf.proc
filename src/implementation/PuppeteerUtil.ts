@@ -6,7 +6,7 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
   const convertHtmlToPdf = async (payload: PuppeteerToPdfRequest): Promise<PuppeteerToPdfResponse> => {
     try {
       const browser = await puppeteer.launch({
-        headless: "new",
+        headless: "shell",
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
       })
       const page = await browser.newPage()

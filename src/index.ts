@@ -17,9 +17,7 @@ app.use(bodyParser.json())
 app.use(RequestIdGenerator())
 app.use(ApiKeyValidator(__config))
 
-app.get('/HealthCheck/Ping', async (_: Request, res: Response) => {
-  return res.status(200)
-})
+app.get('/HealthCheck/Ping', async (_: Request, res: Response) => res.status(200).send("Ok"))
 
 app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -30,13 +28,9 @@ app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFuncti
   }
 })
 
-app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
-  return res.status(500).send({
-    statusCode: 500,
-    message: error.message
-  })
-})
+app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => res.status(500).send({
+  statusCode: 500,
+  message: error.message
+}))
 
-app.listen(__config.port, () => {
-  console.log(`[server]: Server is running at http://localhost:${__config.port}`)
-})
+app.listen(__config.port, () => console.log(`[server]: Server is running on port: ${__config.port}`))
