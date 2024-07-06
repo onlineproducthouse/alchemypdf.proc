@@ -36,4 +36,4 @@ app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => res
   message: error.message
 }))
 
-app.listen(__config.port, () => console.log(`[server]: Server is running on port: ${__config.port}`))
+app.listen(__config.port, () => console.log(`[server]: HTML 2 PDF Converter is running at: ${__config.protocol}://${__config.host}:${__config.port}`))

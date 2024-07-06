@@ -1,13 +1,17 @@
 {
   "name": "oph.api.htmltopdf",
   "version": "1.0.0",
-  "description": "HTML to PDF generator API",
+  "description": "HTML to PDF converter API",
   "main": "lib/index.js",
   "repository": "git",
   "author": "Bongani Masuku<bongani@1702tech.com>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "20.14"
+  },
   "scripts": {
+    "clean:all": "yarn clean && yarn clean:modules",
     "clean": "rm -rf lib types",
     "clean:modules": "rm -rf node_modules",
     "build": "tsc",
