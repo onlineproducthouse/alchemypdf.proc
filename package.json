@@ -8,37 +8,37 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "20.14"
+    "node": ">=22.9"
   },
   "scripts": {
     "clean:all": "yarn clean && yarn clean:modules",
     "clean": "rm -rf lib types",
     "clean:modules": "rm -rf node_modules",
     "build": "tsc",
-    "rebuild": "yarn clean && yarn build",
-    "test": "jest -i",
     "dev": "ts-node src/index.ts",
     "serve": "node lib/index.js",
-    "docker": "source .env && echo $(aws ecr get-login-password | docker login --username AWS --password-stdin $IMAGE_REGISTRY_BASE_URL) && docker-compose -f 'docker-compose.yml' up --build"
+    "docker": "docker compose -f 'docker-compose.yml' up --build",
+    "docker:clean": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq) -f && docker rmi $(docker images -q) -f"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.14.2",
-    "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.13.0",
-    "@typescript-eslint/parser": "^7.13.0",
-    "eslint": "^9.4.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.5",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/parser": "^8.8.1",
+    "eslint": "^9.12.0",
     "ts-node": "^10.9.2",
-    "tslib": "^2.6.3",
-    "typescript": "^5.4.5"
+    "tslib": "^2.7.0",
+    "typescript": "^5.6.2"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.21.1",
     "puppeteer": "^22.11.0",
     "uuid": "^10.0.0"
-  }
+  },
+  "packageManager": "yarn@4.5.0"
 }

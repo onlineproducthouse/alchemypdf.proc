@@ -1,8 +1,6 @@
-import { NextFunction, Request, Response } from "express";
 import { Config } from "../config";
-
 export default function ApiKeyValidator(config: Config) {
-  return function (req: Request, res: Response, next: NextFunction) {
+  return function (req: any, res: any, next: any) {
 
     if (req.path.includes("api")) {
       const apiKey = req.get("x-api-key")

@@ -1,4 +1,4 @@
-import express, { Express, Request, Response, NextFunction } from "express"
+import express, { Express } from "express"
 import bodyParser from "body-parser"
 import ioc from "./ioc"
 import {
@@ -17,12 +17,12 @@ app.use(bodyParser.json())
 app.use(RequestIdGenerator())
 app.use(ApiKeyValidator(__config))
 
-app.get('/HealthCheck/Ping', async (_: Request, res: Response) => res.status(200).send({
+app.get('/HealthCheck/Ping', async (_: any, res: any) => res.status(200).send({
   statusCode: 200,
   message: "Ok"
 }))
 
-app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFunction) => {
+app.post('/api/v1/convert', async (req: any, res: any, next: any) => {
   try {
     const response = await ioc.htmlToPdfService.convert(req.body)
     return res.json(response)
@@ -31,7 +31,7 @@ app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFuncti
   }
 })
 
-app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => res.status(500).send({
+app.use((error: Error, _req: any, res: any, _next: any) => res.status(500).send({
   statusCode: 500,
   message: error.message
 }))
