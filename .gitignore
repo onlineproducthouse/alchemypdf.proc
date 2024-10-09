@@ -125,3 +125,4 @@ storybook-static
 
 storybook-static
 build
+.yarn/install-state.gz
