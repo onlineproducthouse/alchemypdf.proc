@@ -19,8 +19,6 @@ COPY --chown=node:node ./.puppeteerrc.cjs /app/.puppeteerrc.cjs
 
 WORKDIR /app
 
-# USER node
-
 RUN corepack enable && yarn set version berry && yarn && yarn build
 
 RUN npx puppeteer browsers install chrome
