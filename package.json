@@ -1,6 +1,6 @@
 {
   "name": "oph.api.htmltopdf",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "HTML to PDF converter API",
   "main": "lib/index.js",
   "repository": "git",
@@ -11,7 +11,7 @@
     "node": ">=22.9"
   },
   "scripts": {
-    "clean:all": "yarn clean && yarn clean:modules",
+    "clean:all": "npm run clean && npm run clean:modules",
     "clean": "rm -rf lib types",
     "clean:modules": "rm -rf node_modules",
     "build": "tsc",
@@ -39,6 +39,5 @@
     "express": "^4.21.1",
     "puppeteer": "^22.11.0",
     "uuid": "^10.0.0"
-  },
-  "packageManager": "yarn@4.5.0"
+  }
 }
