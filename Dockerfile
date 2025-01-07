@@ -19,7 +19,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Stage - builder
-FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.9 AS builder
+FROM base AS builder
 
 RUN mkdir -p /home/node/app/ \
   && chown -R node:node /home/node/app
