@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG IMAGE_REGISTRY_BASE_URL
+# ARG IMAGE_REGISTRY_BASE_URL
 
 # Stage - base
 FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.9 AS base
