@@ -2,7 +2,6 @@
 
 ARG IMAGE_REGISTRY_BASE_URL
 
-# Stage - base
 FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.9 AS base
 
 LABEL maintainer="Bongani Masuku <bongani@1702tech.com>"
@@ -18,7 +17,6 @@ RUN apt-get update \
 --no-install-recommends \
 && rm -rf /var/lib/apt/lists/*
 
-# Stage - builder
 FROM base AS builder
 
 RUN mkdir -p /home/node/app/ \
@@ -36,7 +34,6 @@ RUN npm run clean:all \
   && npx puppeteer browsers install chrome \
   && npm run build
 
-# Stage - api
 FROM base AS api
 
 RUN mkdir -p /home/node/app/ \
