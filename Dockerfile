@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# ARG IMAGE_REGISTRY_BASE_URL
+ARG IMAGE_REGISTRY_BASE_URL
 
 # Stage - base
 FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.9 AS base
@@ -19,7 +19,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Stage - builder
-FROM base AS builder
+FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.9 AS builder
 
 RUN mkdir -p /home/node/app/ \
   && chown -R node:node /home/node/app
