@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 
+ARG IMAGE_REGISTRY_BASE_URL
+
 # Stage - base
 FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.9 AS base
-
-ARG IMAGE_REGISTRY_BASE_URL
 
 LABEL maintainer="Bongani Masuku <bongani@1702tech.com>"
 
@@ -19,9 +19,7 @@ RUN apt-get update \
 && rm -rf /var/lib/apt/lists/*
 
 # Stage - builder
-FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.9 AS builder
-
-ARG IMAGE_REGISTRY_BASE_URL
+FROM base AS builder
 
 RUN mkdir -p /home/node/app/ \
   && chown -R node:node /home/node/app
