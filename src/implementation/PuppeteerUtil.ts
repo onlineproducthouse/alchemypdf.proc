@@ -7,8 +7,8 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
     try {
       const browser = await puppeteer.launch({
         headless: true,
-        defaultViewport: null,
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        executablePath: '/usr/bin/chromium-browser',
       })
 
       const page = await browser.newPage()

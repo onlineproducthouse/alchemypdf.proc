@@ -1,26 +1,37 @@
 # syntax=docker/dockerfile:1
 
-FROM 767398044056.dkr.ecr.eu-west-1.amazonaws.com/node:22.9 AS base
+ARG IMAGE_REGISTRY_BASE_URL
+
+FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.9-alpine3.19 AS base
 
 LABEL maintainer="Bongani Masuku <bongani@1702tech.com>"
 
-# Install Google Chrome Stable and fonts
-# Note: this installs the necessary libs to make the browser work with Puppeteer.
-RUN apt-get update \
-  && apt-get install -y wget gnupg \
-  && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-  && apt-get update \
-  && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
-  --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+  msttcorefonts-installer \
+  font-noto \
+  fontconfig \
+  freetype \
+  ttf-dejavu \
+  ttf-droid \
+  ttf-freefont \
+  ttf-liberation \
+  nss \
+  harfbuzz \
+  ca-certificates \
+  chromium \
+  && rm -rf /var/cache/apk/* /tmp/*
 
-FROM base AS builder
+RUN update-ms-fonts \
+  && fc-cache -f
 
-RUN mkdir -p /home/node/app/ \
-  && chown -R node:node /home/node/app
+FROM base AS build
 
-WORKDIR /home/node/app/
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+RUN mkdir -p /home/node/app
+
+WORKDIR /home/node/app
 
 COPY ./src ./src
 COPY ./package.json ./package.json
@@ -29,22 +40,28 @@ COPY ./.puppeteerrc.cjs ./.puppeteerrc.cjs
 
 RUN npm run clean:all \
   && npm i \
-  && npx puppeteer browsers install chrome \
   && npm run build
 
-FROM base
+FROM base AS api
 
-RUN mkdir -p /home/node/app/ \
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+RUN mkdir -p /home/node/Downloads \
+  && mkdir -p /home/node/app \
+  && chown -R node:node /home/node/Downloads \
   && chown -R node:node /home/node/app
 
-WORKDIR /home/node/app/
+WORKDIR /home/node/app
 
-COPY --chown=node:node --from=builder /home/node/app/.cache ./.cache
-COPY --chown=node:node --from=builder /home/node/app/lib ./lib
-COPY --chown=node:node --from=builder /home/node/app/types ./types
-COPY --chown=node:node --from=builder /home/node/app/node_modules ./node_modules
-COPY --chown=node:node --from=builder /home/node/app/package.json ./package.json
-COPY --chown=node:node --from=builder /home/node/app/.puppeteerrc.cjs ./.puppeteerrc.cjs
+COPY --from=build /home/node/app/lib ./lib
+COPY --from=build /home/node/app/types ./types
+COPY --from=build /home/node/app/node_modules ./node_modules
+COPY --from=build /home/node/app/package.json ./package.json
+COPY --from=build /home/node/app/package-lock.json ./package-lock.json
+COPY --from=build /home/node/app/.puppeteerrc.cjs ./.puppeteerrc.cjs
+
+RUN npm i puppeteer@13.5.0
 
 USER node
 
