@@ -14,13 +14,14 @@ const app: Express = express()
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(RequestIdGenerator())
-app.use(ApiKeyValidator(__config))
 
 app.get('/api/HealthCheck/Ping', async (_: any, res: any) => res.status(200).send({
   statusCode: 200,
   message: "Ok"
 }))
+
+app.use(RequestIdGenerator())
+app.use(ApiKeyValidator(__config))
 
 app.post('/api/v1/convert', async (req: any, res: any, next: any) => {
   try {
