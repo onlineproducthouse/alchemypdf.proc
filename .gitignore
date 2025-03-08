@@ -113,6 +113,7 @@ storybook-static
 .vscode-test
 *.pem
 *.crt
+*.cert
 
 # Editor directories and files
 .idea
