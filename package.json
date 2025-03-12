@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=22.9"
+    "node": ">=22.13.1"
   },
   "scripts": {
     "clean:all": "npm run clean && npm run clean:modules",
