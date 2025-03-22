@@ -5,15 +5,18 @@ import { IPuppeteerUtil } from "../interface"
 export default function PuppeteerUtil(): IPuppeteerUtil {
   const convertHtmlToPdf = async (payload: PuppeteerToPdfRequest): Promise<PuppeteerToPdfResponse> => {
     try {
+      console.log("launching browser")
       const browser = await puppeteer.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
         executablePath: '/usr/bin/chromium-browser',
       })
 
+      console.log("setting content")
       const page = await browser.newPage()
       await page.setContent(payload.htmlText)
 
+      console.log("generate pdf")
       const buffer = await page.pdf({
         timeout: 0,
         format: 'A4',
@@ -27,6 +30,8 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
       })
 
       await browser.close()
+
+      console.log("return buffer")
 
       return {
         base64: buffer.toString('base64'),
