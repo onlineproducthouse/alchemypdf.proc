@@ -10,6 +10,7 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
         executablePath: '/usr/bin/chromium-browser',
+        timeout: 0,
       })
 
       console.log("setting content")
