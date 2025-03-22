@@ -15,6 +15,7 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
       await page.setContent(payload.htmlText)
 
       const buffer = await page.pdf({
+        timeout: 0,
         format: 'A4',
         scale: 0.7,
         margin: {
