@@ -24,7 +24,6 @@ app.get('/api/HealthCheck/Ping', async (_: any, res: any) => res.status(200).sen
 app.use(ApiKeyValidator(__config))
 
 app.post('/api/v1/convert', async (req: any, res: any, next: any) => {
-  console.log('/api/v1/convert')
   try {
     const response = await ioc.htmlToPdfService.convert(req.body)
     return res.json(response)
@@ -36,8 +35,8 @@ app.post('/api/v1/convert', async (req: any, res: any, next: any) => {
 app.use((error: Error, _req: any, res: any, _next: any) => {
   console.log(error)
   return res.status(500).send({
-  statusCode: 500,
-  message: error.message
+    statusCode: 500,
+    message: error.message
   })
 })
 

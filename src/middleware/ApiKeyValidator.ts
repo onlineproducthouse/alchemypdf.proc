@@ -16,7 +16,7 @@ export default function ApiKeyValidator(config: Config) {
         message: "invalid api key provided",
       })
     }
-    console.log("done ApiKeyValidator")
+
     return next()
   }
 }
