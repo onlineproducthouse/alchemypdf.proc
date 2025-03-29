@@ -62,6 +62,8 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
         base64: buffer.toString('base64'),
       }
     } catch (error) {
+      console.log((error as Error).message);
+      console.log(error);
       throw error
     }
   }
