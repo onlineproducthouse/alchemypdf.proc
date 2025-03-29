@@ -28,12 +28,15 @@ app.post('/api/v1/convert', async (req: any, res: any, next: any) => {
     const response = await ioc.htmlToPdfService.convert(req.body)
     return res.json(response)
   } catch (error) {
+    console.log((error as Error).message);
+    console.log(error);
     return next(error)
   }
 })
 
 app.use((error: Error, _req: any, res: any, _next: any) => {
-  console.log(error)
+  console.log((error as Error).message);
+  console.log(error);
   return res.status(500).send({
     statusCode: 500,
     message: error.message
