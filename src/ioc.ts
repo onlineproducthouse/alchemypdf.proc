@@ -1,14 +1,19 @@
-import { IHtmlToPdf } from "./interface";
-import { HtmlToPdf, PuppeteerUtil } from "./implementation";
+import * as dotenv from "dotenv"
 
-type IoC = {
+dotenv.config()
+
+import { IHtmlToPdf, IOphApi } from "./interface";
+import { HtmlToPdf, OphHtmlToPdfApi, PuppeteerUtil } from "./implementation";
+import { _config, Config } from "./config";
+
+export type IoC = {
   htmlToPdfService: IHtmlToPdf
+  ophApi: IOphApi
 }
 
-const getIoC = (): IoC => ({
+export const getIoC = async (config: Config): Promise<IoC> => ({
   htmlToPdfService: HtmlToPdf({
-    puppeteerUtil: PuppeteerUtil()
+    puppeteerUtil: await PuppeteerUtil()
   }),
+  ophApi: OphHtmlToPdfApi(config)
 })
-
-export default getIoC()

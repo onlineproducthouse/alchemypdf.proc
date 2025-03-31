@@ -2,10 +2,8 @@ import puppeteer from "puppeteer"
 import { PuppeteerToPdfRequest, PuppeteerToPdfResponse } from "../contracts"
 import { IPuppeteerUtil } from "../interface"
 
-export default function PuppeteerUtil(): IPuppeteerUtil {
+export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
   // setup browser
-  var _browser: puppeteer.Browser
-
   const _launchBrowser = async (): Promise<puppeteer.Browser> => {
     console.log("launching browser")
     const b = await puppeteer.launch({
@@ -15,30 +13,37 @@ export default function PuppeteerUtil(): IPuppeteerUtil {
       timeout: 0,
     })
 
-    b.on("disconnected", _launchBrowser)
-
+    console.log("returning browser")
     return b
   }
 
-  (async () => {
-    _browser = await _launchBrowser()
-  })()
+  let _browser: puppeteer.Browser = await _launchBrowser()
+
+  // (async () => {
+  //   _browser = await _launchBrowser()
+  // })()
 
   const _getBrowser = async (): Promise<puppeteer.Browser> => {
-    if (!_browser)
-      _browser = await _launchBrowser()
+    if (!!_browser)
+      return _browser
+
+    console.log("browser not found, launching new browser")
+    _browser = await _launchBrowser()
     return _browser
   }
 
   const _getPage = async (): Promise<puppeteer.Page> => {
     const _browser = await _getBrowser()
-    return await _browser.newPage()
+    const p = await _browser.newPage()
+    return p
   }
 
   const convertHtmlToPdf = async (payload: PuppeteerToPdfRequest): Promise<PuppeteerToPdfResponse> => {
     try {
-      console.log("setting content")
+      console.log("creating new page")
       const page = await _getPage()
+
+      console.log("setting content")
       await page.setContent(payload.htmlText)
 
       console.log("generating pdf")
