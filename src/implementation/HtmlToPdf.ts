@@ -14,7 +14,6 @@ export default function HtmlToPdf({ puppeteerUtil }: HtmlToPdfInitParams): IHtml
       return { htmlBase64: _pdf.base64 }
     } catch (error) {
       console.log("HtmlToPdf - convert - error");
-      console.log((error as Error).message);
       console.log(error);
       throw error
     }
