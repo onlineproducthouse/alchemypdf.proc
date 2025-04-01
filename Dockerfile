@@ -58,7 +58,6 @@ COPY --from=build /home/node/app/lib ./lib
 COPY --from=build /home/node/app/types ./types
 COPY --from=build /home/node/app/node_modules ./node_modules
 COPY --from=build /home/node/app/package.json ./package.json
-COPY --from=build /home/node/app/package-lock.json ./package-lock.json
 COPY --from=build /home/node/app/.puppeteerrc.cjs ./.puppeteerrc.cjs
 
 RUN npm i puppeteer@13.5.0

@@ -1,38 +1,7 @@
-import express, { Express } from "express"
-import bodyParser from "body-parser"
 import { getIoC, IoC } from "./ioc"
-import {
-  RequestIdGenerator,
-} from "./middleware"
 import { _config } from "./config"
-import cors from "cors"
 import { AxiosResponse } from "axios"
 import { DefaultHTTPResponse, OphHtmlToPdfPullResponse } from "./contracts"
-
-const __config = _config()
-const app: Express = express()
-
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.use(RequestIdGenerator())
-
-app.get('/api/HealthCheck/Ping', async (_: any, res: any) => res.status(200).send({
-  statusCode: 200,
-  message: "Ok"
-}))
-
-app.use((error: Error, _req: any, res: any, _next: any) => res.status(500).send({
-  statusCode: 500,
-  message: error.message
-}))
-
-app.listen(__config.port, async () => {
-  console.log(`[server]: HTML 2 PDF Converter is running at: ${__config.protocol}://${__config.host}:${__config.port}`)
-
-  const ioc = await getIoC(__config)
-  await runProcessor(ioc)
-})
 
 const runProcessor = async (ioc: IoC): Promise<void> => {
   let payload: OphHtmlToPdfPullResponse | undefined
@@ -80,3 +49,8 @@ const runProcessor = async (ioc: IoC): Promise<void> => {
   console.log("cooling off")
   setTimeout(() => { runProcessor(ioc) }, 60000)
 }
+
+(async () => {
+  const ioc = await getIoC(_config())
+  await runProcessor(ioc)
+})()

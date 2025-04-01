@@ -1,7 +1,3 @@
-import * as dotenv from "dotenv"
-
-dotenv.config()
-
 import { IHtmlToPdf, IOphApi } from "./interface";
 import { HtmlToPdf, OphHtmlToPdfApi, PuppeteerUtil } from "./implementation";
 import { _config, Config } from "./config";

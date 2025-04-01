@@ -19,10 +19,6 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
 
   let _browser: puppeteer.Browser = await _launchBrowser()
 
-  // (async () => {
-  //   _browser = await _launchBrowser()
-  // })()
-
   const _getBrowser = async (): Promise<puppeteer.Browser> => {
     if (!!_browser)
       return _browser
