@@ -6,8 +6,6 @@ services:
       dockerfile: "Dockerfile"
       args:
         IMAGE_REGISTRY_BASE_URL: ${IMAGE_REGISTRY_BASE_URL}
-    ports:
-      - "${HTMLTOPDF_PORT}:${HTMLTOPDF_PORT}"
     env_file:
       - .env
     environment:
