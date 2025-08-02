@@ -33,9 +33,6 @@ const runProcessor = async (ioc: IoC): Promise<void> => {
 
     console.log("request processed successfully")
   } catch (error) {
-    console.log((error as Error).message)
-    // console.log(error)
-
     if (payload)
       await ioc.ophApi.complete({
         success: false,
