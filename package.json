@@ -1,7 +1,7 @@
 {
-  "name": "oph.api.htmltopdf",
+  "name": "alchemypdf.proc",
   "version": "0.0.0",
-  "description": "HTML to PDF converter API",
+  "description": "AlcheMyPDF HTML 2 PDF Converter Processor",
   "main": "lib/index.js",
   "repository": "git",
   "author": "Bongani Masuku<bongani@1702tech.com>",
