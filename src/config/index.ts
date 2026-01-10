@@ -13,5 +13,5 @@ export const _config = (): Config => ({
   protocol: process.env.ALCHEMYPDFAPI_PROTOCOL || "http",
   host: process.env.ALCHEMYPDFAPI_HOST || "localhost",
   port: parseInt(process.env.ALCHEMYPDFAPI_PORT || "7891", 10),
-  apiKey: (process.env.ALCHEMYPDFAPI_KEYS || "").split(",").filter(key => !!key)[0],
+  apiKey: process.env.ALCHEMYPDFAPI_KEY || "",
 })
