@@ -1,50 +1,34 @@
 import { getIoC, IoC } from "./ioc"
 import { _config } from "./config"
-import { AxiosResponse } from "axios"
-import { DefaultHTTPResponse, OphHtmlToPdfPullResponse } from "./contracts"
+import { AlcheMyPdfRequest, DefaultHTTPResponse } from "./contracts"
 
 const runProcessor = async (ioc: IoC): Promise<void> => {
-  let payload: OphHtmlToPdfPullResponse | undefined
+  let payload: AlcheMyPdfRequest | undefined
 
   try {
-    const healthCheck = await ioc.ophApi.healthCheck()
-    if (healthCheck.status !== 200)
-      throw new Error("oph api unavailable")
+    const getPendingRequest = await ioc.alcheMyPdfApi.getPending()
+    if (getPendingRequest.status !== 200)
+      throw new Error((getPendingRequest.data as DefaultHTTPResponse).message)
 
-    const newRequest: AxiosResponse<unknown> = await ioc.ophApi.pull()
-    if (newRequest.status !== 200)
-      throw new Error((newRequest.data as DefaultHTTPResponse).message)
+    payload = getPendingRequest.data as AlcheMyPdfRequest
 
-    payload = newRequest.data as OphHtmlToPdfPullResponse
-
-    const convertHtml = await ioc.htmlToPdfService.convert({
-      htmlText: payload.htmlString,
-    })
-
-    const completeRequest = await ioc.ophApi.complete({
-      success: true,
-      htmlToPdfRequestId: payload.htmlToPdfRequestId,
-      htmlToPdfRequestActionKey: payload.htmlToPdfRequestActionKey,
-      htmlToPdfRequestPayload: payload.htmlToPdfRequestPayload,
+    const convertHtml = await ioc.htmlToPdfService.convert({ htmlText: payload.content })
+    const _callback = await ioc.alcheMyPdfApi.callback(payload.callbackUrl, {
       pdfString: convertHtml.htmlBase64,
+      success: true
     })
-    if (completeRequest.status !== 200)
-      throw new Error(completeRequest.data.message)
+    if (_callback.status !== 200)
+      throw new Error((_callback.data as DefaultHTTPResponse).message)
 
-    console.log("request processed successfully")
-  } catch (error) {
+    const _complete = await ioc.alcheMyPdfApi.complete({ requestId: payload?.requestId || 0, success: true })
+    if (_complete.status !== 200)
+      throw new Error((_complete.data as DefaultHTTPResponse).message)
+  } catch (error: unknown) {
     if (payload)
-      await ioc.ophApi.complete({
-        success: false,
-        htmlToPdfRequestId: payload.htmlToPdfRequestId,
-        htmlToPdfRequestActionKey: payload.htmlToPdfRequestActionKey,
-        htmlToPdfRequestPayload: payload.htmlToPdfRequestPayload,
-        pdfString: "",
-      })
+      await ioc.alcheMyPdfApi.complete({ requestId: payload?.requestId || 0, success: false })
   }
 
-  console.log("cooling off")
-  setTimeout(() => { runProcessor(ioc) }, 60000)
+  setTimeout(async () => await runProcessor(ioc), 15000)
 }
 
 (async () => {
