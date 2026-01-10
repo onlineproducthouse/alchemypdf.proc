@@ -5,9 +5,10 @@ import {
   DefaultHTTPResponse,
   CallbackRequest,
   CompleteRequest,
+  AlcheMyPdfRequest,
 } from "../contracts"
 import { Config } from '../config'
-import IAlcheMyPdfApi from '../interface'
+import { IAlcheMyPdfApi } from '../interface'
 
 const getHTTPRequestHeaders = (cfg: Config) => ({
   'x-api-key': cfg.apiKey,
@@ -19,9 +20,9 @@ const getUrl = (cfg: Config) => `${cfg.protocol}://${cfg.host}:${cfg.port}`
 const AlcheMyPdfApi = (cfg: Config): IAlcheMyPdfApi => {
   const url = getUrl(cfg)
 
-  const getPending = async (): Promise<AxiosResponse<DefaultHTTPResponse>> => {
+  const getPending = async (): Promise<AxiosResponse<AlcheMyPdfRequest>> => {
     try {
-      return await HTTPRequest<undefined, DefaultHTTPResponse>({
+      return await HTTPRequest<undefined, AlcheMyPdfRequest>({
         method: 'GET',
         url: url + "/api/v1/Request/GetPending",
         headers: getHTTPRequestHeaders(cfg),

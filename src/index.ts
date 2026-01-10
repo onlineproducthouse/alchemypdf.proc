@@ -1,12 +1,13 @@
 import { getIoC, IoC } from "./ioc"
 import { _config } from "./config"
 import { AlcheMyPdfRequest, DefaultHTTPResponse } from "./contracts"
+import { AxiosResponse } from "axios"
 
 const runProcessor = async (ioc: IoC): Promise<void> => {
   let payload: AlcheMyPdfRequest | undefined
 
   try {
-    const getPendingRequest = await ioc.alcheMyPdfApi.getPending()
+    const getPendingRequest: AxiosResponse<unknown> = await ioc.alcheMyPdfApi.getPending()
     if (getPendingRequest.status !== 200)
       throw new Error((getPendingRequest.data as DefaultHTTPResponse).message)
 
