@@ -1,18 +1,13 @@
-import { IHtmlToPdf } from "./interface";
-import { HtmlToPdf, PuppeteerUtil } from "./implementation";
+import { IHtmlToPdf, IAlcheMyPdfApi } from "./interface";
+import { HtmlToPdf, AlcheMyPdfApi, PuppeteerUtil } from "./implementation";
+import { _config, Config } from "./config";
 
-type IoC = {
+export type IoC = {
   htmlToPdfService: IHtmlToPdf
+  alcheMyPdfApi: IAlcheMyPdfApi
 }
 
-const htmlToPdfService = HtmlToPdf({
-  puppeteerUtil: PuppeteerUtil()
+export const getIoC = async (config: Config): Promise<IoC> => ({
+  htmlToPdfService: HtmlToPdf({ puppeteerUtil: await PuppeteerUtil() }),
+  alcheMyPdfApi: AlcheMyPdfApi(config)
 })
-
-const getIoC = (): IoC => {
-  return {
-    htmlToPdfService,
-  }
-}
-
-export default getIoC()

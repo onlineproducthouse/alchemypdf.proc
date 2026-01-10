@@ -2,43 +2,66 @@
 
 ARG IMAGE_REGISTRY_BASE_URL
 
-FROM --platform=linux/amd64 ${IMAGE_REGISTRY_BASE_URL}/node-alpine:18.14 AS builder
+FROM ${IMAGE_REGISTRY_BASE_URL}/node:22.13.1-alpine3.21 AS base
 
 LABEL maintainer="Bongani Masuku <bongani@1702tech.com>"
 
-RUN mkdir -p /src
+RUN apk add --no-cache \
+  msttcorefonts-installer \
+  font-noto \
+  fontconfig \
+  freetype \
+  ttf-dejavu \
+  ttf-droid \
+  ttf-freefont \
+  ttf-liberation \
+  nss \
+  harfbuzz \
+  ca-certificates \
+  chromium \
+  && rm -rf /var/cache/apk/* /tmp/*
 
-COPY ./src /src/src
-COPY ./yarn.lock /src/yarn.lock
-COPY ./package.json /src/package.json
-COPY ./tsconfig.json /src/tsconfig.json
-COPY ./.puppeteerrc.cjs /src/.puppeteerrc.cjs
+RUN update-ms-fonts \
+  && fc-cache -f
 
-WORKDIR /src
+FROM base AS build
 
-RUN yarn clean \
-  && yarn clean:modules \
-  && yarn \
-  && yarn build
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
-FROM --platform=linux/amd64 node:18.14 AS api
+RUN mkdir -p /home/node/app
 
-RUN apt-get update
-RUN apt-get install -y gconf-service libasound2 libgbm-dev libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libnss3 lsb-release xdg-utils wget
+WORKDIR /home/node/app
 
-RUN mkdir -p /app
-RUN chown -R node:node /app/
+COPY ./src ./src
+COPY ./package.json ./package.json
+COPY ./tsconfig.json ./tsconfig.json
+COPY ./.puppeteerrc.cjs ./.puppeteerrc.cjs
 
-COPY --chown=node:node --from=builder /src/lib /app/lib
-COPY --chown=node:node --from=builder /src/types /app/types
-COPY --chown=node:node --from=builder /src/node_modules /app/node_modules
-COPY --chown=node:node --from=builder /src/package.json /app/package.json
-COPY --chown=node:node --from=builder /src/.puppeteerrc.cjs /app/.puppeteerrc.cjs
+RUN npm run clean:all \
+  && npm i \
+  && npm run build
 
-WORKDIR /app
+FROM base AS api
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+RUN mkdir -p /home/node/Downloads \
+  && mkdir -p /home/node/app \
+  && chown -R node:node /home/node/Downloads \
+  && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
+
+COPY --from=build /home/node/app/lib ./lib
+COPY --from=build /home/node/app/types ./types
+COPY --from=build /home/node/app/node_modules ./node_modules
+COPY --from=build /home/node/app/package.json ./package.json
+COPY --from=build /home/node/app/.puppeteerrc.cjs ./.puppeteerrc.cjs
+
+RUN npm i puppeteer@13.5.0
 
 USER node
 
-RUN npx puppeteer browsers install chrome
-
-ENTRYPOINT [ "sh", "-c", "yarn serve" ]
+ENTRYPOINT [ "sh", "-c", "npm run serve" ]

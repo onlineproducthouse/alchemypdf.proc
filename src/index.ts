@@ -1,36 +1,38 @@
-import express, { Express, Request, Response, NextFunction } from "express"
-import bodyParser from "body-parser"
-import ioc from "./ioc"
-import {
-  ApiKeyValidator,
-  RequestIdGenerator,
-} from "./middleware"
+import { getIoC, IoC } from "./ioc"
 import { _config } from "./config"
-import cors from "cors"
+import { AlcheMyPdfRequest, DefaultHTTPResponse } from "./contracts"
+import { AxiosResponse } from "axios"
 
-const __config = _config()
-const app: Express = express()
+const runProcessor = async (ioc: IoC): Promise<void> => {
+  let payload: AlcheMyPdfRequest | undefined
 
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.use(RequestIdGenerator())
-app.use(ApiKeyValidator(__config))
-
-app.post('/api/v1/convert', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const response = await ioc.htmlToPdfService.convert(req.body)
-    return res.json(response)
-  } catch (error) {
-    return next(error)
+    const getPendingRequest: AxiosResponse<unknown> = await ioc.alcheMyPdfApi.getPending()
+    if (getPendingRequest.status !== 200)
+      throw new Error((getPendingRequest.data as DefaultHTTPResponse).message)
+
+    payload = getPendingRequest.data as AlcheMyPdfRequest
+
+    const convertHtml = await ioc.htmlToPdfService.convert({ htmlText: payload.content })
+    const _callback = await ioc.alcheMyPdfApi.callback(payload.callbackUrl, {
+      pdfString: convertHtml.htmlBase64,
+      success: true
+    })
+    if (_callback.status !== 200)
+      throw new Error((_callback.data as DefaultHTTPResponse).message)
+
+    const _complete = await ioc.alcheMyPdfApi.complete({ requestId: payload?.requestId || 0, success: true })
+    if (_complete.status !== 200)
+      throw new Error((_complete.data as DefaultHTTPResponse).message)
+  } catch (error: unknown) {
+    if (payload)
+      await ioc.alcheMyPdfApi.complete({ requestId: payload?.requestId || 0, success: false })
   }
-})
 
-app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
-  console.log(error)
-  return res.status(500).send(error)
-})
+  setTimeout(async () => await runProcessor(ioc), 15000)
+}
 
-app.listen(__config.port, () => {
-  console.log(`[server]: Server is running at http://localhost:${__config.port}`)
-})
+(async () => {
+  const ioc = await getIoC(_config())
+  await runProcessor(ioc)
+})()
