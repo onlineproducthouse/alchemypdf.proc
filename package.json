@@ -10,7 +10,8 @@
     "envsetup": "npm run clean && npm i && npm run build && npm run docker",
     "docker": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && docker compose up --build",
     "docker:clean": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq) -f && docker rmi $(docker images -q) -f",
-    "test:int": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && npm run test --workspace=@alchemypdf.proc/api.test.int"
+    "test:int": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && npm run test --workspace=@alchemypdf.proc/api.test.int",
+    "proc": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && npm run serve --workspace=@alchemypdf.proc/processor"
   },
   "repository": {
     "type": "git",
