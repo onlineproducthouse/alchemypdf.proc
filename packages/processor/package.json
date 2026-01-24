@@ -1,7 +1,7 @@
 {
-  "name": "dph.api.htmltopdf",
-  "version": "1.0.0",
-  "description": "HTML to PDF generator API",
+  "name": "@alchemypdf.proc/processor",
+  "version": "0.0.0",
+  "description": "AlcheMyPDF Processor",
   "main": "lib/index.js",
   "repository": "git",
   "author": "Bongani Masuku<bongani@1702tech.com>",
@@ -33,6 +33,11 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@alchemypdf.proc/api": "^0.0.0",
+    "@alchemypdf.proc/config": "^0.0.0",
+    "@alchemypdf.proc/constants": "^0.0.0",
+    "@alchemypdf.proc/contracts": "^0.0.0",
+    "@alchemypdf.proc/utilities": "^0.0.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
