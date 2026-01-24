@@ -33,18 +33,3 @@ services:
       - .env
     environment:
       ALCHEMYPDF_DB_HOST: pg
-
-  proc:
-    restart: "always"
-    depends_on:
-      pg:
-        condition: service_healthy
-    build:
-      context: "./"
-      dockerfile: "Dockerfile"
-      args:
-        IMAGE_REGISTRY_BASE_URL: ${IMAGE_REGISTRY_BASE_URL}
-    env_file:
-      - .env
-    environment:
-      ALCHEMYPDF_DB_HOST: pg
