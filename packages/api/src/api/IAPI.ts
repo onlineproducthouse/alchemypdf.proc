@@ -1,9 +1,9 @@
 import {
   IHealthCheckAPI,
-  IRequestAPI,
+  IAlcheMyPdfAPI,
 } from "./interfaces";
 
 export interface IAPI {
   healthCheck: () => IHealthCheckAPI
-  request: () => IRequestAPI
+  alcheMyPdf: () => IAlcheMyPdfAPI
 }

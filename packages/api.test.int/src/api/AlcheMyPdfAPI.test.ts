@@ -2,17 +2,17 @@ import { describe, expect, test } from '@jest/globals'
 import { constants } from '@alchemypdf.proc/constants'
 import { getConfig } from '../config'
 import { api } from '@alchemypdf.proc/api'
-import { RequestGetResponse, DefaultHTTPResponse, RequestCreateRequest } from '@alchemypdf.proc/contracts'
+import { AlcheMyPdfRequest, DefaultHTTPResponse, AlcheMyPdfCreateRequest } from '@alchemypdf.proc/contracts'
 import { AxiosResponse } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 
-describe("RequestAPI", () => {
+describe("AlcheMyPdfAPI", () => {
   test.skip("create", async () => {
     // setup
     const _api = api({ config: getConfig() })
 
     // execute
-    const result: AxiosResponse<unknown> = await _api.request().create({
+    const result: AxiosResponse<unknown> = await _api.alcheMyPdf().create({
       callbackUrl: 'https://api.example.org/path/to/callback',
       clientReference: uuidV4(),
       content: '[let\'s pretend this is HTML]',
@@ -28,21 +28,21 @@ describe("RequestAPI", () => {
     // setup
     const _api = api({ config: getConfig() })
 
-    const requestPayload: RequestCreateRequest = {
+    const requestPayload: AlcheMyPdfCreateRequest = {
       callbackUrl: 'https://api.example.org/path/to/callback',
       clientReference: uuidV4(),
       content: '[let\'s pretend this is HTML]',
     }
 
-    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
     expect(createResponse.status).toBe(200)
 
     // execute
-    const result: AxiosResponse<unknown> = await _api.request()
+    const result: AxiosResponse<unknown> = await _api.alcheMyPdf()
       .getByClientReference(requestPayload.clientReference)
 
     // assert
-    const resultPayload = result.data as RequestGetResponse[]
+    const resultPayload = result.data as AlcheMyPdfRequest[]
 
     expect(result.status).toBe(200)
     expect(resultPayload.length).toBe(1)
@@ -58,21 +58,21 @@ describe("RequestAPI", () => {
     // setup
     const _api = api({ config: getConfig() })
 
-    const requestPayload: RequestCreateRequest = {
+    const requestPayload: AlcheMyPdfCreateRequest = {
       callbackUrl: 'https://api.example.org/path/to/callback',
       clientReference: uuidV4(),
       content: '[let\'s pretend this is HTML]',
     }
 
-    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
     expect(createResponse.status).toBe(200)
 
     // execute
-    const result: AxiosResponse<unknown> = await _api.request()
+    const result: AxiosResponse<unknown> = await _api.alcheMyPdf()
       .getWithContentByClientReference(requestPayload.clientReference)
 
     // assert
-    const resultPayload = result.data as RequestGetResponse[]
+    const resultPayload = result.data as AlcheMyPdfRequest[]
 
     expect(result.status).toBe(200)
     expect(resultPayload.length).toBe(1)
@@ -88,20 +88,20 @@ describe("RequestAPI", () => {
     // setup
     const _api = api({ config: getConfig() })
 
-    const requestPayload: RequestCreateRequest = {
+    const requestPayload: AlcheMyPdfCreateRequest = {
       callbackUrl: 'https://api.example.org/path/to/callback',
       clientReference: uuidV4(),
       content: '[let\'s pretend this is HTML]',
     }
 
-    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
     expect(createResponse.status).toBe(200)
 
     // execute
-    const result: AxiosResponse<unknown> = await _api.request().getPending()
+    const result: AxiosResponse<unknown> = await _api.alcheMyPdf().getPending()
 
     // assert
-    const resultPayload = result.data as RequestGetResponse
+    const resultPayload = result.data as AlcheMyPdfRequest
 
     expect(result.status).toBe(200)
     expect(resultPayload.callbackUrl).toBe(requestPayload.callbackUrl)
@@ -109,10 +109,10 @@ describe("RequestAPI", () => {
     expect(resultPayload.content).toBe(requestPayload.content)
     expect(resultPayload.requestStateKey).toBe(constants.api.REQUEST_STATE_KEY_PENDING)
 
-    const getResponse: AxiosResponse<unknown> = await _api.request()
+    const getResponse: AxiosResponse<unknown> = await _api.alcheMyPdf()
       .getByClientReference(resultPayload.clientReference)
 
-    const getResponsePayload = getResponse.data as RequestGetResponse[]
+    const getResponsePayload = getResponse.data as AlcheMyPdfRequest[]
 
     expect(getResponse.status).toBe(200)
     expect(getResponsePayload.length).toBe(1)
@@ -128,20 +128,20 @@ describe("RequestAPI", () => {
     // setup
     const _api = api({ config: getConfig() })
 
-    const requestPayload: RequestCreateRequest = {
+    const requestPayload: AlcheMyPdfCreateRequest = {
       callbackUrl: 'https://api.example.org/path/to/callback',
       clientReference: uuidV4(),
       content: '[let\'s pretend this is HTML]',
     }
 
-    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
     expect(createResponse.status).toBe(200)
 
-    const getPendingResponse: AxiosResponse<RequestGetResponse> = await _api.request().getPending()
+    const getPendingResponse: AxiosResponse<AlcheMyPdfRequest> = await _api.alcheMyPdf().getPending()
     expect(getPendingResponse.status).toBe(200)
 
     // execute
-    const result: AxiosResponse<DefaultHTTPResponse> = await _api.request().complete({
+    const result: AxiosResponse<DefaultHTTPResponse> = await _api.alcheMyPdf().complete({
       requestId: getPendingResponse.data.requestId,
       success: false,
     })
@@ -151,10 +151,10 @@ describe("RequestAPI", () => {
     expect(result.data.statusCode).toBe(200)
     expect(result.data.message).toBe("Ok")
 
-    const getResponse: AxiosResponse<unknown> = await _api.request()
+    const getResponse: AxiosResponse<unknown> = await _api.alcheMyPdf()
       .getByClientReference(getPendingResponse.data.clientReference)
 
-    const getResponsePayload = getResponse.data as RequestGetResponse[]
+    const getResponsePayload = getResponse.data as AlcheMyPdfRequest[]
 
     expect(getResponse.status).toBe(200)
     expect(getResponsePayload.length).toBe(1)
@@ -170,20 +170,20 @@ describe("RequestAPI", () => {
     // setup
     const _api = api({ config: getConfig() })
 
-    const requestPayload: RequestCreateRequest = {
+    const requestPayload: AlcheMyPdfCreateRequest = {
       callbackUrl: 'https://api.example.org/path/to/callback',
       clientReference: uuidV4(),
       content: '[let\'s pretend this is HTML]',
     }
 
-    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
     expect(createResponse.status).toBe(200)
 
-    const getPendingResponse: AxiosResponse<RequestGetResponse> = await _api.request().getPending()
+    const getPendingResponse: AxiosResponse<AlcheMyPdfRequest> = await _api.alcheMyPdf().getPending()
     expect(getPendingResponse.status).toBe(200)
 
     // execute
-    const result: AxiosResponse<DefaultHTTPResponse> = await _api.request().complete({
+    const result: AxiosResponse<DefaultHTTPResponse> = await _api.alcheMyPdf().complete({
       requestId: getPendingResponse.data.requestId,
       success: true,
     })
@@ -193,10 +193,10 @@ describe("RequestAPI", () => {
     expect(result.data.statusCode).toBe(200)
     expect(result.data.message).toBe("Ok")
 
-    const getResponse: AxiosResponse<unknown> = await _api.request()
+    const getResponse: AxiosResponse<unknown> = await _api.alcheMyPdf()
       .getByClientReference(getPendingResponse.data.clientReference)
 
-    const getResponsePayload = getResponse.data as RequestGetResponse[]
+    const getResponsePayload = getResponse.data as AlcheMyPdfRequest[]
 
     expect(getResponse.status).toBe(200)
     expect(getResponsePayload.length).toBe(1)
