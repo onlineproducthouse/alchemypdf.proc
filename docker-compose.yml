@@ -1,12 +1,36 @@
 services:
-  api:
+  pg:
+    image: "${IMAGE_REGISTRY_BASE_URL}/postgis/postgis:14-3.2"
     restart: "always"
-    build:
-      context: "./"
-      dockerfile: "Dockerfile"
-      args:
-        IMAGE_REGISTRY_BASE_URL: ${IMAGE_REGISTRY_BASE_URL}
+    ports:
+      - "${ALCHEMYPDF_DB_PORT}:${ALCHEMYPDF_DB_PORT}"
+    healthcheck:
+      test: "pg_isready --username=${ALCHEMYPDF_DB_USERNAME} && psql --username=${ALCHEMYPDF_DB_USERNAME} --list"
+      timeout: 10s
+      retries: 20
+    environment:
+      POSTGRES_USER: "${ALCHEMYPDF_DB_USERNAME}"
+      POSTGRES_PASSWORD: "${ALCHEMYPDF_DB_PASSWORD}"
+
+  db:
+    image: "${IMAGE_REGISTRY_BASE_URL}/onlineproducthouse/alchemypdf.db:latest"
+    network_mode: "host"
+    depends_on:
+      pg:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  api:
+    image: "${IMAGE_REGISTRY_BASE_URL}/onlineproducthouse/alchemypdf.api:latest"
+    restart: "always"
+    depends_on:
+      pg:
+        condition: service_healthy
+    ports:
+      - "${ALCHEMYPDF_API_PORT}:${ALCHEMYPDF_API_PORT}"
     env_file:
       - .env
     environment:
-      - API_HOST=0.0.0.0
+      ALCHEMYPDF_DB_HOST: pg
+      AWS_PROFILE: assume_role

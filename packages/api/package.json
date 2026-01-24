@@ -1,0 +1,26 @@
+{
+  "name": "@alchemypdf.proc/api",
+  "version": "0.0.0",
+  "description": "OnlineProductHouse API Web SDK Contracts",
+  "main": "lib/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=25.2.1"
+  },
+  "author": "Bongani Masuku <bongani@1702tech.com>",
+  "license": "ISC",
+  "scripts": {
+    "clean": "rm -rf lib types",
+    "clean:modules": "rm -rf node_modules",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@alchemypdf.proc/config": "^0.0.0",
+    "@alchemypdf.proc/contracts": "^0.0.0",
+    "@alchemypdf.proc/utilities": "^0.0.0",
+    "axios": "^1.7.7"
+  }
+}

@@ -1,0 +1,210 @@
+import { describe, expect, test } from '@jest/globals'
+import { constants } from '@alchemypdf.proc/constants'
+import { getConfig } from '../config'
+import { api } from '@alchemypdf.proc/api'
+import { RequestGetResponse, DefaultHTTPResponse, RequestCreateRequest } from '@alchemypdf.proc/contracts'
+import { AxiosResponse } from 'axios'
+import { v4 as uuidV4 } from 'uuid'
+
+describe("RequestAPI", () => {
+  test.skip("create", async () => {
+    // setup
+    const _api = api({ config: getConfig() })
+
+    // execute
+    const result: AxiosResponse<unknown> = await _api.request().create({
+      callbackUrl: 'https://api.example.org/path/to/callback',
+      clientReference: uuidV4(),
+      content: '[let\'s pretend this is HTML]',
+    })
+
+    // assert
+    expect(result.status).toBe(200)
+    expect((result.data as DefaultHTTPResponse).statusCode).toBe(200)
+    expect((result.data as DefaultHTTPResponse).message).toBe("Ok")
+  })
+
+  test.skip("getByClientReference", async () => {
+    // setup
+    const _api = api({ config: getConfig() })
+
+    const requestPayload: RequestCreateRequest = {
+      callbackUrl: 'https://api.example.org/path/to/callback',
+      clientReference: uuidV4(),
+      content: '[let\'s pretend this is HTML]',
+    }
+
+    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    expect(createResponse.status).toBe(200)
+
+    // execute
+    const result: AxiosResponse<unknown> = await _api.request()
+      .getByClientReference(requestPayload.clientReference)
+
+    // assert
+    const resultPayload = result.data as RequestGetResponse[]
+
+    expect(result.status).toBe(200)
+    expect(resultPayload.length).toBe(1)
+    for (let i = 0; i < resultPayload.length; i++) {
+      expect(resultPayload[i].callbackUrl).toBe(requestPayload.callbackUrl)
+      expect(resultPayload[i].clientReference).toBe(requestPayload.clientReference)
+      expect(resultPayload[i].content).toBe("")
+      expect(resultPayload[i].requestStateKey).toBe(constants.api.REQUEST_STATE_KEY_PENDING)
+    }
+  })
+
+  test("getWithContentByClientReference", async () => {
+    // setup
+    const _api = api({ config: getConfig() })
+
+    const requestPayload: RequestCreateRequest = {
+      callbackUrl: 'https://api.example.org/path/to/callback',
+      clientReference: uuidV4(),
+      content: '[let\'s pretend this is HTML]',
+    }
+
+    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    expect(createResponse.status).toBe(200)
+
+    // execute
+    const result: AxiosResponse<unknown> = await _api.request()
+      .getWithContentByClientReference(requestPayload.clientReference)
+
+    // assert
+    const resultPayload = result.data as RequestGetResponse[]
+
+    expect(result.status).toBe(200)
+    expect(resultPayload.length).toBe(1)
+    for (let i = 0; i < resultPayload.length; i++) {
+      expect(resultPayload[i].callbackUrl).toBe(requestPayload.callbackUrl)
+      expect(resultPayload[i].clientReference).toBe(requestPayload.clientReference)
+      expect(resultPayload[i].content).toBe(requestPayload.content)
+      expect(resultPayload[i].requestStateKey).toBe(constants.api.REQUEST_STATE_KEY_PENDING)
+    }
+  })
+
+  test.skip("getPending", async () => {
+    // setup
+    const _api = api({ config: getConfig() })
+
+    const requestPayload: RequestCreateRequest = {
+      callbackUrl: 'https://api.example.org/path/to/callback',
+      clientReference: uuidV4(),
+      content: '[let\'s pretend this is HTML]',
+    }
+
+    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    expect(createResponse.status).toBe(200)
+
+    // execute
+    const result: AxiosResponse<unknown> = await _api.request().getPending()
+
+    // assert
+    const resultPayload = result.data as RequestGetResponse
+
+    expect(result.status).toBe(200)
+    expect(resultPayload.callbackUrl).toBe(requestPayload.callbackUrl)
+    expect(resultPayload.clientReference.length).toBe(36)
+    expect(resultPayload.content).toBe(requestPayload.content)
+    expect(resultPayload.requestStateKey).toBe(constants.api.REQUEST_STATE_KEY_PENDING)
+
+    const getResponse: AxiosResponse<unknown> = await _api.request()
+      .getByClientReference(resultPayload.clientReference)
+
+    const getResponsePayload = getResponse.data as RequestGetResponse[]
+
+    expect(getResponse.status).toBe(200)
+    expect(getResponsePayload.length).toBe(1)
+    for (let i = 0; i < getResponsePayload.length; i++) {
+      expect(getResponsePayload[i].callbackUrl).toBe(requestPayload.callbackUrl)
+      expect(getResponsePayload[i].clientReference).toBe(resultPayload.clientReference)
+      expect(getResponsePayload[i].content).toBe("")
+      expect(getResponsePayload[i].requestStateKey).toBe(constants.api.REQUEST_STATE_KEY_IN_PROGRESS)
+    }
+  })
+
+  test("complete : pending -> in progress -> pending", async () => {
+    // setup
+    const _api = api({ config: getConfig() })
+
+    const requestPayload: RequestCreateRequest = {
+      callbackUrl: 'https://api.example.org/path/to/callback',
+      clientReference: uuidV4(),
+      content: '[let\'s pretend this is HTML]',
+    }
+
+    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    expect(createResponse.status).toBe(200)
+
+    const getPendingResponse: AxiosResponse<RequestGetResponse> = await _api.request().getPending()
+    expect(getPendingResponse.status).toBe(200)
+
+    // execute
+    const result: AxiosResponse<DefaultHTTPResponse> = await _api.request().complete({
+      requestId: getPendingResponse.data.requestId,
+      success: false,
+    })
+
+    // assert
+    expect(result.status).toBe(200)
+    expect(result.data.statusCode).toBe(200)
+    expect(result.data.message).toBe("Ok")
+
+    const getResponse: AxiosResponse<unknown> = await _api.request()
+      .getByClientReference(getPendingResponse.data.clientReference)
+
+    const getResponsePayload = getResponse.data as RequestGetResponse[]
+
+    expect(getResponse.status).toBe(200)
+    expect(getResponsePayload.length).toBe(1)
+    for (let i = 0; i < getResponsePayload.length; i++) {
+      expect(getResponsePayload[i].callbackUrl).toBe(requestPayload.callbackUrl)
+      expect(getResponsePayload[i].clientReference).toBe(getPendingResponse.data.clientReference)
+      expect(getResponsePayload[i].content).toBe("")
+      expect(getResponsePayload[i].requestStateKey).toBe(constants.api.REQUEST_STATE_KEY_PENDING)
+    }
+  })
+
+  test("complete : pending -> in progress -> complete", async () => {
+    // setup
+    const _api = api({ config: getConfig() })
+
+    const requestPayload: RequestCreateRequest = {
+      callbackUrl: 'https://api.example.org/path/to/callback',
+      clientReference: uuidV4(),
+      content: '[let\'s pretend this is HTML]',
+    }
+
+    const createResponse: AxiosResponse<unknown> = await _api.request().create(requestPayload)
+    expect(createResponse.status).toBe(200)
+
+    const getPendingResponse: AxiosResponse<RequestGetResponse> = await _api.request().getPending()
+    expect(getPendingResponse.status).toBe(200)
+
+    // execute
+    const result: AxiosResponse<DefaultHTTPResponse> = await _api.request().complete({
+      requestId: getPendingResponse.data.requestId,
+      success: true,
+    })
+
+    // assert
+    expect(result.status).toBe(200)
+    expect(result.data.statusCode).toBe(200)
+    expect(result.data.message).toBe("Ok")
+
+    const getResponse: AxiosResponse<unknown> = await _api.request()
+      .getByClientReference(getPendingResponse.data.clientReference)
+
+    const getResponsePayload = getResponse.data as RequestGetResponse[]
+
+    expect(getResponse.status).toBe(200)
+    expect(getResponsePayload.length).toBe(1)
+    for (let i = 0; i < getResponsePayload.length; i++) {
+      expect(getResponsePayload[i].callbackUrl).toBe(requestPayload.callbackUrl)
+      expect(getResponsePayload[i].clientReference).toBe(getPendingResponse.data.clientReference)
+      expect(getResponsePayload[i].content).toBe("")
+      expect(getResponsePayload[i].requestStateKey).toBe(constants.api.REQUEST_STATE_KEY_COMPLETED)
+    }
+  })
+})
