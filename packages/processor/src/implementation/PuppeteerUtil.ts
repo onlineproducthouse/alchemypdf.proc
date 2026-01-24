@@ -1,5 +1,5 @@
-import puppeteer from "puppeteer"
-import { PuppeteerToPdfRequest, PuppeteerToPdfResponse } from "../contracts"
+import * as puppeteer from "puppeteer"
+import { PuppeteerToPdfRequest, PuppeteerToPdfResponse } from "@alchemypdf.proc/contracts"
 import { IPuppeteerUtil } from "../interface"
 
 export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {

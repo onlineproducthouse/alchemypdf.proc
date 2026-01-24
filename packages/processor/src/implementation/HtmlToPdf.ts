@@ -1,4 +1,4 @@
-import { HtmlToPdfRequest, HtmlToPdfResponse } from "../contracts";
+import { HtmlToPdfRequest, HtmlToPdfResponse } from "@alchemypdf.proc/contracts";
 import { IHtmlToPdf, IPuppeteerUtil } from "../interface";
 
 type HtmlToPdfInitParams = {
