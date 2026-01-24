@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   api:
     restart: "always"
@@ -8,6 +7,6 @@ services:
       args:
         IMAGE_REGISTRY_BASE_URL: ${IMAGE_REGISTRY_BASE_URL}
     ports:
-      - "${HTML_TO_PDF_CONVERTER_API_PORT}:${HTML_TO_PDF_CONVERTER_API_PORT}"
+      - "${HTMLTOPDF_PORT}:${HTMLTOPDF_PORT}"
     env_file:
       - .env

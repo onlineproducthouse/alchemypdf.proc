@@ -9,10 +9,7 @@ export default function HtmlToPdf({ puppeteerUtil }: HtmlToPdfInitParams): IHtml
   const convert = async ({ htmlText }: HtmlToPdfRequest): Promise<HtmlToPdfResponse> => {
     try {
       const _pdf = await puppeteerUtil.convertHtmlToPdf({ htmlText })
-
-      return {
-        htmlBase64: _pdf.base64,
-      }
+      return { htmlBase64: _pdf.base64 }
     } catch (error) {
       throw error
     }
