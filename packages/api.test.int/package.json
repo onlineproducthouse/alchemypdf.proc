@@ -1,0 +1,42 @@
+{
+  "name": "@alchemypdf.proc/api.test.int",
+  "version": "0.0.0",
+  "description": "AlcheMyPDF API Integration Tests",
+  "main": "lib/index.js",
+  "types": "types/index.d.ts",
+  "author": "Bongani Masuku <bongani@1702tech.com>",
+  "license": "ISC",
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=25.2.1"
+  },
+  "scripts": {
+    "clean": "echo 'clean not implemented for test project'",
+    "clean:modules": "rm -rf node_modules",
+    "build": "echo 'build not implemented for test project'",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.8",
+    "@babel/preset-typescript": "^7.25.7",
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.13",
+    "@types/uuid": "^10.0.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5"
+  },
+  "dependencies": {
+    "@alchemypdf.proc/api": "^0.0.0",
+    "@alchemypdf.proc/config": "^0.0.0",
+    "@alchemypdf.proc/constants": "^0.0.0",
+    "@alchemypdf.proc/contracts": "^0.0.0",
+    "@alchemypdf.proc/utilities": "^0.0.0",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "uuid": "^11.0.3"
+  }
+}
