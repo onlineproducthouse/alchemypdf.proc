@@ -48,3 +48,5 @@ services:
       - .env
     environment:
       ALCHEMYPDF_DB_HOST: pg
+      ALCHEMYPDF_API_HOST: api
+      ALCHEMYPDF_OVERRIDE_CALLBACK: true

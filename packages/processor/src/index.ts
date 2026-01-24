@@ -14,7 +14,9 @@ const runProcessor = async (ioc: IoC): Promise<void> => {
     payload = getPendingRequest.data as AlcheMyPdfRequest
 
     const convertHtml = await ioc.htmlToPdfService.convert({ htmlText: payload.content })
-    const _callback = await ioc.alcheMyPdfAPI.callback(payload.callbackUrl, {
+    const callbackUrl = process.env.ALCHEMYPDF_OVERRIDE_CALLBACK === "true"
+      ? payload.callbackUrl.replace(/(?:127.0.0.1|locahost)/, process.env.ALCHEMYPDF_API_HOST || "api")
+      : payload.callbackUrl
       pdfString: convertHtml.htmlBase64,
       success: true
     })
