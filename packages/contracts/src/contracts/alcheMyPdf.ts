@@ -1,15 +1,10 @@
-export type RequestCreateRequest = {
+export type AlcheMyPdfCreateRequest = {
   callbackUrl: string
   clientReference: string
   content: string
 }
 
-export type RequestCompleteRequest = {
-  requestId: number
-  success: boolean
-}
-
-export type RequestGetResponse = {
+export type AlcheMyPdfRequest = {
   attemptCount: number
   callbackUrl: string
   clientReference: string
@@ -19,4 +14,14 @@ export type RequestGetResponse = {
   requestId: number
   requestStateKey: string
   updatedAt: string
+}
+
+export type AlcheMyPdfCompleteRequest = {
+  requestId: number
+  success: boolean
+}
+
+export type AlcheMyPdfCallbackRequest = {
+  pdfString: string
+  success: boolean
 }
