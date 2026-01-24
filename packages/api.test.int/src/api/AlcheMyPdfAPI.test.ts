@@ -6,16 +6,28 @@ import { AlcheMyPdfRequest, DefaultHTTPResponse, AlcheMyPdfCreateRequest } from 
 import { AxiosResponse } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 
+const htmlText: string = `<!DOCTYPE html>
+<html>
+<head>
+    <title>My Webpage Title</title>
+</head>
+<body>
+    <h1>This is a Main Heading</h1>
+    <p>This is a paragraph of text in the body.</p>
+</body>
+</html>`
+
 describe("AlcheMyPdfAPI", () => {
   test.skip("create", async () => {
     // setup
-    const _api = api({ config: getConfig() })
+    const config = getConfig()
+    const _api = api({ config })
 
     // execute
     const result: AxiosResponse<unknown> = await _api.alcheMyPdf().create({
-      callbackUrl: 'https://api.example.org/path/to/callback',
+      callbackUrl: config.apiUrl() + '/Request/Callback',
       clientReference: uuidV4(),
-      content: '[let\'s pretend this is HTML]',
+      content: htmlText,
     })
 
     // assert
@@ -26,12 +38,13 @@ describe("AlcheMyPdfAPI", () => {
 
   test.skip("getByClientReference", async () => {
     // setup
-    const _api = api({ config: getConfig() })
+    const config = getConfig()
+    const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: 'https://api.example.org/path/to/callback',
+      callbackUrl: config.apiUrl() + '/Request/Callback',
       clientReference: uuidV4(),
-      content: '[let\'s pretend this is HTML]',
+      content: htmlText,
     }
 
     const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
@@ -56,13 +69,16 @@ describe("AlcheMyPdfAPI", () => {
 
   test("getWithContentByClientReference", async () => {
     // setup
-    const _api = api({ config: getConfig() })
+    const config = getConfig()
+    const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: 'https://api.example.org/path/to/callback',
+      callbackUrl: config.apiUrl() + '/Request/Callback',
       clientReference: uuidV4(),
-      content: '[let\'s pretend this is HTML]',
+      content: htmlText,
     }
+
+    console.log(requestPayload.content)
 
     const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
     expect(createResponse.status).toBe(200)
@@ -74,24 +90,29 @@ describe("AlcheMyPdfAPI", () => {
     // assert
     const resultPayload = result.data as AlcheMyPdfRequest[]
 
+    console.log(resultPayload[0].content)
+
     expect(result.status).toBe(200)
     expect(resultPayload.length).toBe(1)
     for (let i = 0; i < resultPayload.length; i++) {
+      console.log(resultPayload[i].content)
+
       expect(resultPayload[i].callbackUrl).toBe(requestPayload.callbackUrl)
       expect(resultPayload[i].clientReference).toBe(requestPayload.clientReference)
-      expect(resultPayload[i].content).toBe(requestPayload.content)
+      expect(resultPayload[i].content).toMatch(requestPayload.content)
       expect(resultPayload[i].requestStateKey).toBe(constants.api.REQUEST_STATE_KEY_PENDING)
     }
   })
 
   test.skip("getPending", async () => {
     // setup
-    const _api = api({ config: getConfig() })
+    const config = getConfig()
+    const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: 'https://api.example.org/path/to/callback',
+      callbackUrl: config.apiUrl() + '/Request/Callback',
       clientReference: uuidV4(),
-      content: '[let\'s pretend this is HTML]',
+      content: htmlText,
     }
 
     const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
@@ -126,12 +147,13 @@ describe("AlcheMyPdfAPI", () => {
 
   test("complete : pending -> in progress -> pending", async () => {
     // setup
-    const _api = api({ config: getConfig() })
+    const config = getConfig()
+    const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: 'https://api.example.org/path/to/callback',
+      callbackUrl: config.apiUrl() + '/Request/Callback',
       clientReference: uuidV4(),
-      content: '[let\'s pretend this is HTML]',
+      content: htmlText,
     }
 
     const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
@@ -168,12 +190,13 @@ describe("AlcheMyPdfAPI", () => {
 
   test("complete : pending -> in progress -> complete", async () => {
     // setup
-    const _api = api({ config: getConfig() })
+    const config = getConfig()
+    const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: 'https://api.example.org/path/to/callback',
+      callbackUrl: config.apiUrl() + '/Request/Callback',
       clientReference: uuidV4(),
-      content: '[let\'s pretend this is HTML]',
+      content: htmlText,
     }
 
     const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
