@@ -1,3 +1,3 @@
 export { default as IHtmlToPdf } from "./IHtmlToPdf"
 export { default as IPuppeteerUtil } from "./IPuppeteerUtil"
-export { default as IOphApi } from "./IOphHtmlToPdfApi"
+export { default as IAlcheMyPdfApi } from "./IAlcheMyPdfApi"
