@@ -1,17 +1,13 @@
 import * as dotenv from "dotenv"
+import path from "path"
+import { config } from "@alchemypdf.proc/config"
 
-dotenv.config()
+dotenv.config({ path: path.join(path.dirname + "./.env") })
 
-export type Config = {
-  protocol: string
-  host: string
-  port: number
-  apiKey: string
-}
-
-export const _config = (): Config => ({
-  protocol: process.env.ALCHEMYPDFAPI_PROTOCOL || "http",
-  host: process.env.ALCHEMYPDFAPI_HOST || "localhost",
-  port: parseInt(process.env.ALCHEMYPDFAPI_PORT || "7891", 10),
-  apiKey: process.env.ALCHEMYPDFAPI_KEY || "",
+export const getConfig = () => config({
+  apiKey: process.env.ALCHEMYPDF_PROC_API_KEY || '',
+  apiProtocol: process.env.ALCHEMYPDF_API_PROTOCOL || "http",
+  apiHost: process.env.ALCHEMYPDF_API_HOST || "127.0.0.1",
+  apiPort: process.env.ALCHEMYPDF_API_PORT || '7891',
+  apiBasePath: process.env.ALCHEMYPDF_API_BASEPATH || '/api/v1',
 })
