@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "AlcheMyPDF Processor",
   "main": "lib/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "lib",
+    "types"
+  ],
   "repository": "git",
   "author": "Bongani Masuku<bongani@1702tech.com>",
   "license": "MIT",
@@ -14,7 +19,6 @@
     "clean": "rm -rf lib types",
     "clean:modules": "rm -rf node_modules",
     "build": "tsc",
-    "rebuild": "yarn clean && yarn build",
     "test": "jest -i",
     "dev": "ts-node src/index.ts",
     "serve": "node lib/index.js",

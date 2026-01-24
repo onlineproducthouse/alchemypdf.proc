@@ -3,15 +3,17 @@
   "version": "0.0.0",
   "description": "AlcheMyPDF",
   "scripts": {
+    "build": "npm run build --workspaces",
     "clean": "npm run clean:build && npm run clean:modules",
     "clean:build": "npm run clean --workspaces",
     "clean:modules": "npm run clean:modules --workspaces && rm -rf node_modules",
-    "build": "npm run build --workspaces",
-    "envsetup": "npm run clean && npm i && npm run build && npm run docker",
-    "docker": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && docker compose up --build",
+    "docker": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && docker compose -f 'docker-compose.yml' up --build",
     "docker:clean": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq) -f && docker rmi $(docker images -q) -f",
+    "env": "npm run clean && npm i && npm run build && npm run docker",
+    "proc": "npm run serve --workspace=@alchemypdf.proc/processor",
+    "test:docker": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && docker compose -f 'docker-compose.debug.yml' up --build",
     "test:int": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && npm run test --workspace=@alchemypdf.proc/api.test.int",
-    "proc": "export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && npm run serve --workspace=@alchemypdf.proc/processor"
+    "test:setup": "npm run clean && npm i && npm run build && npm run test:docker"
   },
   "repository": {
     "type": "git",
