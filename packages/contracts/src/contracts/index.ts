@@ -1,5 +1,4 @@
-export * from "./request"
 export * from "./defaultHTTPResponse"
 export * from "./puppeteer"
 export * from "./htmlToPdf"
-export * from "./alcheMyPdfApi"
+export * from "./alcheMyPdf"
