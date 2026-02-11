@@ -7,7 +7,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
   const _launchBrowser = async (): Promise<puppeteer.Browser> => {
     console.log("launching browser")
     const b = await puppeteer.launch({
-      headless: "new",
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       executablePath: '/usr/bin/chromium-browser',
       timeout: 0,
@@ -61,7 +61,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
       console.log("returning buffer")
 
       return {
-        base64: buffer.toString('base64'),
+        base64: buffer.toString(),
       }
     } catch (error) {
       console.log((error as Error).message);
