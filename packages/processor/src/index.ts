@@ -21,11 +21,9 @@ const runProcessor = async (ioc: IoC): Promise<void> => {
 
     console.log("[alchemypdf.proc]: executing callback")
 
-    const callbackUrl = process.env.ALCHEMYPDF_OVERRIDE_CALLBACK === "true"
-      ? payload.callbackUrl.replace(/(?:127.0.0.1|locahost)/, process.env.ALCHEMYPDF_API_HOST || "api")
+    const callbackUrl = ioc.config.overrideCallback()
+      ? ioc.config.callbackUrl()
       : payload.callbackUrl
-
-    console.log("[alchemypdf.proc]: callbackUrl - ", callbackUrl)
 
     const _callback = await ioc.alcheMyPdfAPI.callback(callbackUrl, {
       pdfString: convertHtml.htmlBase64,

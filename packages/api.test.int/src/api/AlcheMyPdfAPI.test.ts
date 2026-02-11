@@ -25,7 +25,7 @@ describe("AlcheMyPdfAPI", () => {
 
     // execute
     const result: AxiosResponse<unknown> = await _api.alcheMyPdf().create({
-      callbackUrl: config.apiUrl() + '/Request/Callback',
+      callbackUrl: config.callbackUrl(),
       clientReference: uuidV4(),
       content: htmlText,
     })
@@ -42,7 +42,7 @@ describe("AlcheMyPdfAPI", () => {
     const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: config.apiUrl() + '/Request/Callback',
+      callbackUrl: config.callbackUrl(),
       clientReference: uuidV4(),
       content: htmlText,
     }
@@ -73,7 +73,7 @@ describe("AlcheMyPdfAPI", () => {
     const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: config.apiUrl() + '/Request/Callback',
+      callbackUrl: config.callbackUrl(),
       clientReference: uuidV4(),
       content: htmlText,
     }
@@ -110,7 +110,7 @@ describe("AlcheMyPdfAPI", () => {
     const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: config.apiUrl() + '/Request/Callback',
+      callbackUrl: config.callbackUrl(),
       clientReference: uuidV4(),
       content: htmlText,
     }
@@ -151,7 +151,7 @@ describe("AlcheMyPdfAPI", () => {
     const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: config.apiUrl() + '/Request/Callback',
+      callbackUrl: config.callbackUrl(),
       clientReference: uuidV4(),
       content: htmlText,
     }
@@ -194,7 +194,7 @@ describe("AlcheMyPdfAPI", () => {
     const _api = api({ config })
 
     const requestPayload: AlcheMyPdfCreateRequest = {
-      callbackUrl: config.apiUrl() + '/Request/Callback',
+      callbackUrl: config.callbackUrl(),
       clientReference: uuidV4(),
       content: htmlText,
     }

@@ -5,12 +5,15 @@ export type Environment = {
   apiHost: string
   apiPort: string
   apiBasePath: string
+  overrideCallback: boolean
 }
 
 export interface IConfig {
   apiKey(): string
   apiHost(): string
   apiUrl(): string
+  overrideCallback(): boolean
+  callbackUrl(): string
 }
 
 export function config(env: Environment): IConfig {
@@ -22,5 +25,7 @@ export function config(env: Environment): IConfig {
     apiKey,
     apiHost,
     apiUrl,
+    overrideCallback: () => env.overrideCallback,
+    callbackUrl: () => apiUrl() + '/Request/Callback',
   };
 }

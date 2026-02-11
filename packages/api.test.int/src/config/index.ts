@@ -10,4 +10,5 @@ export const getConfig = () => config({
   apiHost: process.env.ALCHEMYPDF_API_HOST || "127.0.0.1",
   apiPort: process.env.ALCHEMYPDF_API_PORT || '7891',
   apiBasePath: process.env.ALCHEMYPDF_API_BASEPATH || '/api/v1',
+  overrideCallback: process.env.ALCHEMYPDF_OVERRIDE_CALLBACK === "true",
 })
