@@ -11,6 +11,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       executablePath: '/usr/bin/chromium-browser',
       timeout: 0,
+      protocolTimeout: 300000,
     })
 
     console.log("returning browser")
