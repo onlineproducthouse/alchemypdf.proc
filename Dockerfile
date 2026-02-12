@@ -2,7 +2,7 @@
 
 ARG IMAGE_REGISTRY_BASE_URL
 
-FROM ${IMAGE_REGISTRY_BASE_URL}/node:25.2.1-alpine AS base
+FROM ${IMAGE_REGISTRY_BASE_URL}/node:25.2.1-slim AS base
 
 LABEL maintainer="Bongani Masuku <bongani@1702tech.com>"
 
