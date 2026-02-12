@@ -14,7 +14,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
         '--disable-gpu',
         '--disable-dev-shm-usage',
       ],
-      // executablePath: '/usr/bin/chromium-browser',
+      executablePath: '/usr/bin/chromium', // '/usr/bin/chromium',
       timeout: 0,
       protocolTimeout: 300000,
     })
