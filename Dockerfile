@@ -6,25 +6,21 @@ FROM ${IMAGE_REGISTRY_BASE_URL}/node:25.2.1-slim AS base
 
 LABEL maintainer="Bongani Masuku <bongani@1702tech.com>"
 
-RUN apk add --no-cache \
-  git \
-  msttcorefonts-installer \
-  font-noto \
-  fontconfig \
-  freetype \
-  ttf-dejavu \
-  ttf-droid \
-  ttf-freefont \
-  ttf-liberation \
-  nss \
-  harfbuzz \
-  ca-certificates \
+RUN apt-get update && apt-get install -y \
   chromium \
-  envsubst \
-  && rm -rf /var/cache/apk/* /tmp/*
-
-RUN update-ms-fonts \
-  && fc-cache -f
+  fonts-liberation \
+  libappindicator3-1 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
+  libdbus-glib-1-2 \
+  libgbm1 \
+  libnss3 \
+  lsb-release \
+  xdg-utils \
+  wget \
+  --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/*
 
 FROM base AS build
 
