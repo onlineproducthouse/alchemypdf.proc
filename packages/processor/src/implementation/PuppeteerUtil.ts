@@ -8,7 +8,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
     console.log("launching browser")
     const b = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
       executablePath: '/usr/bin/chromium-browser',
       timeout: 0,
       protocolTimeout: 300000,
