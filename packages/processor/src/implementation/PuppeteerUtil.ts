@@ -9,10 +9,10 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
     const b = await puppeteer.launch({
       headless: "shell",
       args: [
-        // '--no-sandbox',
-        // '--disable-setuid-sandbox',
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
         '--disable-gpu',
-        // '--disable-dev-shm-usage',
+        '--disable-dev-shm-usage',
       ],
       executablePath: '/usr/bin/chromium', // '/usr/bin/chromium',
       timeout: 0,
