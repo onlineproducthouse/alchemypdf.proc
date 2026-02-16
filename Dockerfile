@@ -46,10 +46,6 @@ RUN npm run clean \
 
 FROM base
 
-ENV PUPPETEER_DOWNLOAD_BASE_URL="https://storage.googleapis.com/chrome-for-testing-public"
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-
 RUN mkdir -p /home/node/Downloads \
   && mkdir -p /home/node/app \
   && chown -R node:node /home/node/Downloads \
