@@ -25,24 +25,21 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
 
   let _browser: puppeteer.Browser = await _launchBrowser()
 
-  const _getBrowser = async (): Promise<puppeteer.Browser> => {
+  const _getBrowser = async (): Promise<puppeteer.BrowserContext> => {
     if (!!_browser)
-      return _browser
+      return await _browser.createBrowserContext()
 
     console.log("browser not found, launching new browser")
     _browser = await _launchBrowser()
-    return _browser
-  }
-
-  const _getPage = async (): Promise<puppeteer.Page> => {
-    const _browser = await _getBrowser()
-    return await _browser.newPage()
+    return _browser.createBrowserContext()
   }
 
   const convertHtmlToPdf = async (payload: PuppeteerToPdfRequest): Promise<PuppeteerToPdfResponse> => {
     try {
+      console.log("creating new browser context")
+      const _browser = await _getBrowser()
       console.log("creating new page")
-      const page = await _getPage()
+      const page = await _browser.newPage()
 
       console.log("setting content")
       await page.setContent(payload.htmlText)
@@ -60,7 +57,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
         },
       })
 
-      await page.close()
+      await _browser.close()
 
       console.log("returning buffer")
 
