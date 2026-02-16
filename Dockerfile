@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
 
 FROM base AS build
 
+ENV PUPPETEER_DOWNLOAD_BASE_URL="https://storage.googleapis.com/chrome-for-testing-public"
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
@@ -40,17 +41,18 @@ COPY ./packages/processor ./packages/processor
 COPY ./packages/utilities ./packages/utilities
 
 RUN npm run clean \
-&& npm i \
-&& npm run build
+  && npm i \
+  && npm run build
 
 FROM base
 
+ENV PUPPETEER_DOWNLOAD_BASE_URL="https://storage.googleapis.com/chrome-for-testing-public"
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 RUN mkdir -p /home/node/Downloads \
-&& mkdir -p /home/node/app \
-&& chown -R node:node /home/node/Downloads \
+  && mkdir -p /home/node/app \
+  && chown -R node:node /home/node/Downloads \
   && chown -R node:node /home/node/app
 
 WORKDIR /home/node/app
