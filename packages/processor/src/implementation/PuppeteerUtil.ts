@@ -9,8 +9,8 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
     const b = await puppeteer.launch({
       headless: "shell",
       args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
+        // '--no-sandbox',
+        // '--disable-setuid-sandbox',
         '--disable-gpu',
         // '--disable-dev-shm-usage',
       ],
@@ -42,7 +42,9 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
       const page = await _browser.newPage()
 
       console.log("setting content")
-      await page.setContent(payload.htmlText)
+      await page.setContent(payload.htmlText, {
+        waitUntil: 'networkidle2',
+      })
 
       console.log("generating pdf")
       const buffer = await page.pdf({
