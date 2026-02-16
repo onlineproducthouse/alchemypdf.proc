@@ -7,12 +7,12 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
   const _launchBrowser = async (): Promise<puppeteer.Browser> => {
     console.log("launching browser")
     const b = await puppeteer.launch({
-      headless: true,
+      headless: "shell",
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-gpu',
-        '--disable-dev-shm-usage',
+        // '--disable-dev-shm-usage',
       ],
       executablePath: '/usr/bin/chromium', // '/usr/bin/chromium',
       timeout: 0,
@@ -36,8 +36,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
 
   const _getPage = async (): Promise<puppeteer.Page> => {
     const _browser = await _getBrowser()
-    const p = await _browser.newPage()
-    return p
+    return await _browser.newPage()
   }
 
   const convertHtmlToPdf = async (payload: PuppeteerToPdfRequest): Promise<PuppeteerToPdfResponse> => {
