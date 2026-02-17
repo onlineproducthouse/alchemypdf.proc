@@ -78,8 +78,6 @@ describe("AlcheMyPdfAPI", () => {
       content: htmlText,
     }
 
-    console.log(requestPayload.content)
-
     const createResponse: AxiosResponse<unknown> = await _api.alcheMyPdf().create(requestPayload)
     expect(createResponse.status).toBe(200)
 
@@ -89,8 +87,6 @@ describe("AlcheMyPdfAPI", () => {
 
     // assert
     const resultPayload = result.data as AlcheMyPdfRequest[]
-
-    console.log(resultPayload[0].content)
 
     expect(result.status).toBe(200)
     expect(resultPayload.length).toBe(1)
