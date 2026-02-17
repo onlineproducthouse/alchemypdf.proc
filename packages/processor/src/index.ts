@@ -37,12 +37,14 @@ const runProcessor = async (ioc: IoC): Promise<void> => {
     if (_complete.status !== 200)
       throw new Error((_complete.data as DefaultHTTPResponse).message)
   } catch (error: unknown) {
-    console.log("[alchemypdf.proc]: an error occurred", error as Error)
+    if ((error as Error).message !== "request not found")
+      console.log("[alchemypdf.proc]: an error occurred", error as Error)
+
     if (payload)
       await ioc.alcheMyPdfAPI.complete({ requestId: payload?.requestId || 0, success: false })
+  } finally {
+    setTimeout(async () => await runProcessor(ioc), 15000)
   }
-
-  setTimeout(async () => await runProcessor(ioc), 15000)
 }
 
 (async () => {

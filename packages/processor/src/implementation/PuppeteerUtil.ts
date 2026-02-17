@@ -12,7 +12,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-gpu',
-        // '--disable-dev-shm-usage',
+        '--disable-dev-shm-usage',
       ],
       executablePath: '/usr/bin/chromium', // '/usr/bin/chromium',
       timeout: 0,
@@ -42,7 +42,9 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
       const page = await _browser.newPage()
 
       console.log("setting content")
-      await page.setContent(payload.htmlText)
+      await page.setContent(payload.htmlText, {
+        waitUntil: 'networkidle2',
+      })
 
       console.log("generating pdf")
       const buffer = await page.pdf({
