@@ -43,7 +43,7 @@ const runProcessor = async (ioc: IoC): Promise<void> => {
     if (payload)
       await ioc.alcheMyPdfAPI.complete({ requestId: payload?.requestId || 0, success: false })
   } finally {
-    setTimeout(async () => await runProcessor(ioc), 15000)
+    setTimeout(async () => await runProcessor(ioc), 5000)
   }
 }
 
