@@ -47,7 +47,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
       })
 
       console.log("generating pdf")
-      const buffer = await page.pdf({
+      const rawPdf = await page.pdf({
         timeout: 0,
         format: 'A4',
         scale: 0.7,
@@ -64,7 +64,7 @@ export default async function PuppeteerUtil(): Promise<IPuppeteerUtil> {
       console.log("returning buffer")
 
       return {
-        base64: buffer.toString(),
+        base64: Buffer.from(rawPdf.buffer).toString('base64'),
       }
     } catch (error) {
       console.log((error as Error).message);
