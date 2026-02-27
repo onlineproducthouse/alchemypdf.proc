@@ -47,6 +47,14 @@ export ALCHEMYPDF_PROC_API_KEY=69d2eddc-2cc9-acab-1a9c-dfcb1fca3efb
 npm run proc
 ```
 
+## Integration tests
+
+Given all steps have been followed, you may execute integration tests.
+
+```bash
+npm run test --workspace=@alchemypdf.proc/api.test.int
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
