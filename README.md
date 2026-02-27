@@ -4,8 +4,9 @@ AlcheMyPDF Processor project for converting HTML to PDF using Puppeteer.
 
 ## Dependencies
 
-1. [AlcheMyPDF database migrations](https://github.com/onlineproducthouse/alchemypdf.db/blob/main/README.md) must have been executed.
-2. [AlcheMyPDF API](https://github.com/onlineproducthouse/alchemypdf.api/blob/main/README.md) must be running.
+1. A running instance of PostreSQL is required
+2. [AlcheMyPDF database migrations](https://github.com/onlineproducthouse/alchemypdf.db/blob/main/README.md) must have been executed.
+3. [AlcheMyPDF API](https://github.com/onlineproducthouse/alchemypdf.api/blob/main/README.md) must be running.
 
 ## Installation
 
@@ -28,7 +29,7 @@ npm run build
 # set to either: local, test, qa, prod
 export ENVIRONMENT_NAME=local
 
-# set environment variables for the postgres database instance
+# set environment variables for the API
 export RUN_SWAGGER=true
 
 export ALCHEMYPDF_PROJECT_NAME=AlcheMyPDF
@@ -40,6 +41,7 @@ export ALCHEMYPDF_API_PORT=10000
 export ALCHEMYPDF_API_BASEPATH=/api/v1
 export ALCHEMYPDF_API_KEYS=69d2eddc-2cc9-acab-1a9c-dfcb1fca3efb
 
+# set environment variables for the Processor
 export ALCHEMYPDF_OVERRIDE_CALLBACK=false
 export ALCHEMYPDF_PROC_API_KEY=69d2eddc-2cc9-acab-1a9c-dfcb1fca3efb
 
